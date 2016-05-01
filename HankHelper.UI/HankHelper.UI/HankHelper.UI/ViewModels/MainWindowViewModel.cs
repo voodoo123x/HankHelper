@@ -1,4 +1,5 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight.Command;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -236,6 +237,55 @@ namespace HankHelper.UI
                 }
             }
         }
+        #endregion
+
+        #region Commands
+        #region AddDriverCommand
+        private RelayCommand<object> m_AddDriverCommand;
+
+        public RelayCommand<object> AddDriverCommand
+        {
+            get
+            {
+                if (m_AddDriverCommand == null)
+                {
+                    m_AddDriverCommand = new RelayCommand<object>(OnAddDriver, CanAddDriver);
+                }
+
+                return m_AddDriverCommand;
+            }
+        }
+
+        public bool CanAddDriver(object param)
+        {
+            if (string.IsNullOrEmpty(DriverName)
+                && string.IsNullOrEmpty(DriverDirectory)
+                && string.IsNullOrEmpty(DriverTargetExec))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void OnAddDriver(object param)
+        {
+            DriversToAdd.Add(new DriverEntity
+            {
+                Name = DriverName,
+                Directory = DriverDirectory,
+                Executable = DriverTargetExec,
+                Switches = DriverExecSwitches
+            });
+
+            DriverName = string.Empty;
+            DriverDirectory = string.Empty;
+            DriverTargetExec = string.Empty;
+            DriverExecSwitches = string.Empty;
+        }
+        #endregion
         #endregion
 
         #region Private Methods
