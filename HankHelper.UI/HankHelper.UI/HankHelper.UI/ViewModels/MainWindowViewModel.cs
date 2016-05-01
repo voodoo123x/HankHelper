@@ -22,6 +22,7 @@ namespace HankHelper.UI
         private string m_DriverExecSwitches;
         private string m_SaveName;
         private string m_SaveDirectory;
+        private string m_SelectedDriverToAdd;
         private IList<string> m_Colors;
         private IList<DriverEntity> m_DriversToAdd = new List<DriverEntity>();
         #endregion
@@ -191,6 +192,20 @@ namespace HankHelper.UI
                 {
                     m_SaveDirectory = value;
                     NotifyPropertyChanged("SaveDirectory");
+                }
+            }
+        }
+
+        public string SelectedDriverToAdd
+        {
+            get { return m_SelectedDriverToAdd; }
+
+            set
+            {
+                if (value != m_SelectedDriverToAdd)
+                {
+                    m_SelectedDriverToAdd = value;
+                    NotifyPropertyChanged("SelectedDriverToAdd");
                 }
             }
         }
