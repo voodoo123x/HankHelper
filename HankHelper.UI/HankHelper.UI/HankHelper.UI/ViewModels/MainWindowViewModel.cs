@@ -1,14 +1,16 @@
-﻿using GalaSoft.MvvmLight.Command;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using HankHelper.UI.Entities;
+using HankHelper.UI.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace HankHelper.UI
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : BasePropertyChanged, INotifyPropertyChanged
     {
         #region Private Data Members
         private string m_ScriptTitle;
@@ -23,9 +25,9 @@ namespace HankHelper.UI
         private string m_DriverExecSwitches;
         private string m_SaveName;
         private string m_SaveDirectory;
-        private string m_SelectedDriverToAdd;
+        private DriverEntity m_SelectedDriver;
         private IList<string> m_Colors;
-        private IList<DriverEntity> m_DriversToAdd = new List<DriverEntity>();
+        private ObservableCollection<DriverEntity> m_DriversToAdd = new ObservableCollection<DriverEntity>();
         #endregion
 
         #region Public Data Members
@@ -157,7 +159,7 @@ namespace HankHelper.UI
 
         public string DriverExecSwitches
         {
-            get { return m_DriverTargetExec; }
+            get { return m_DriverExecSwitches; }
 
             set
             {
@@ -197,16 +199,16 @@ namespace HankHelper.UI
             }
         }
 
-        public string SelectedDriverToAdd
+        public DriverEntity SelectedDriver
         {
-            get { return m_SelectedDriverToAdd; }
+            get { return m_SelectedDriver; }
 
             set
             {
-                if (value != m_SelectedDriverToAdd)
+                if (value != m_SelectedDriver)
                 {
-                    m_SelectedDriverToAdd = value;
-                    NotifyPropertyChanged("SelectedDriverToAdd");
+                    m_SelectedDriver = value;
+                    NotifyPropertyChanged("SelectedDriver");
                 }
             }
         }
@@ -224,7 +226,7 @@ namespace HankHelper.UI
             }
         }
 
-        public IList<DriverEntity> DriversToAdd
+        public ObservableCollection<DriverEntity> DriversToAdd
         {
             get { return m_DriversToAdd; }
 
@@ -258,16 +260,9 @@ namespace HankHelper.UI
 
         public bool CanAddDriver(object param)
         {
-            if (string.IsNullOrEmpty(DriverName)
-                && string.IsNullOrEmpty(DriverDirectory)
-                && string.IsNullOrEmpty(DriverTargetExec))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
+            return (   !string.IsNullOrEmpty(DriverName)
+                    && !string.IsNullOrEmpty(DriverDirectory)
+                    && !string.IsNullOrEmpty(DriverTargetExec));
         }
 
         public void OnAddDriver(object param)
@@ -286,6 +281,89 @@ namespace HankHelper.UI
             DriverExecSwitches = string.Empty;
         }
         #endregion
+
+        #region RemoveDriverCommand
+        private RelayCommand<object> m_RemoveDriverCommand;
+
+        public RelayCommand<object> RemoveDriverCommand
+        {
+            get
+            {
+                if (m_RemoveDriverCommand == null)
+                {
+                    m_RemoveDriverCommand = new RelayCommand<object>(OnRemoveDriver, CanRemoveDriver);
+                }
+
+                return m_RemoveDriverCommand;
+            }
+        }
+
+        public bool CanRemoveDriver(object param)
+        {
+            return (SelectedDriver != null);
+        }
+
+        public void OnRemoveDriver (object param)
+        {
+            DriversToAdd.Remove(SelectedDriver);
+        }
+        #endregion
+
+        #region BrowseDirectoryCommand
+        private RelayCommand<object> m_BrowseDirectoryCommand;
+
+        public RelayCommand<object> BrowseDirectoryCommand
+        {
+            get
+            {
+                if (m_BrowseDirectoryCommand == null)
+                {
+                    m_BrowseDirectoryCommand = new RelayCommand<object>(OnBrowseDirectory);
+                }
+
+                return m_BrowseDirectoryCommand;
+            }
+        }
+
+        public void OnBrowseDirectory(object param)
+        {
+            FolderBrowserDialog browseDialog = new FolderBrowserDialog();
+
+            if (browseDialog.ShowDialog() == DialogResult.OK)
+            {
+                SaveDirectory = browseDialog.SelectedPath;
+            }
+        }
+        #endregion
+
+        #region GenerateScriptCommand
+        private RelayCommand<object> m_GenerateScriptCommand;
+
+        public RelayCommand<object> GenerateScriptCommand
+        {
+            get
+            {
+                if (m_GenerateScriptCommand == null)
+                {
+                    m_GenerateScriptCommand = new RelayCommand<object>(OnGenerateScript, CanGenerateScript);
+                }
+
+                return m_GenerateScriptCommand;
+            }
+        }
+
+        public bool CanGenerateScript(object param)
+        {
+            return (!string.IsNullOrEmpty(ScriptTitle)
+                && !string.IsNullOrEmpty(SaveName)
+                && !string.IsNullOrEmpty(SaveDirectory));
+        }
+
+        public void OnGenerateScript(object param)
+        {
+            
+        }
+        #endregion
         #endregion
 
         #region Private Methods
@@ -299,25 +377,6 @@ namespace HankHelper.UI
             }
 
             return colors;
-        }
-        #endregion
-
-        #region INotifyPropertyChanged
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        private void NotifyPropertyChanged(string info)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(info));
-        }
-        #endregion
-
-        #region Entity Classes
-        public class DriverEntity
-        {
-            public string Name { get; set; }
-            public string Directory { get; set; }
-            public string Executable { get; set; }
-            public string Switches { get; set; }
         }
         #endregion
 

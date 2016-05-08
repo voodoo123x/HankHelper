@@ -121,19 +121,19 @@
 
                 <!-- Driver Name -->
                 <Label Grid.Column="0" Grid.Row="0" Content="Name" Style="{StaticResource propertyLabelStyle}"/>
-                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding DriverName}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding DriverName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
 
                 <!-- Driver Directory -->
                 <Label Grid.Column="0" Grid.Row="1" Content="Directory" Style="{StaticResource propertyLabelStyle}"/>
-                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding DriverDirectory}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding DriverDirectory, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
 
                 <!-- Executable File Name -->
                 <Label Grid.Column="0" Grid.Row="2" Content="Exec Target" Style="{StaticResource propertyLabelStyle}"/>
-                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding DriverTargetExec}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding DriverTargetExec, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
 
                 <!-- Executable Install Switches -->
                 <Label Grid.Column="0" Grid.Row="3" Content="Switches" Style="{StaticResource propertyLabelStyle}"/>
-                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding DriverExecSwitches}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
+                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding DriverExecSwitches, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
 
                 <!-- Add Driver Button -->
                 <Button Grid.Column="2" Grid.Row="5" Content="Add Driver" HorizontalAlignment="Right" Style="{StaticResource localButtonStyle}" Command="{Binding AddDriverCommand}"/>
@@ -152,10 +152,11 @@
             </Grid.RowDefinitions>
 
             <!-- List of Drivers Currently Added -->
-            <DataGrid Grid.Column="0" Grid.Row="0" Margin="0,5" FontSize="14" ItemsSource="{Binding DriversToAdd}" SelectedItem="{Binding SelectedDriverToAdd}"/>
+            <DataGrid Grid.Column="0" Grid.Row="0" Margin="0,5" FontSize="14" ItemsSource="{Binding DriversToAdd}" SelectedItem="{Binding SelectedDriver}"
+                CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserReorderColumns="False" SelectionMode="Single"/>
 
             <!-- Removed Selected Driver -->
-            <Button Grid.Column="0" Grid.Row="1" Content="Remove Driver" HorizontalAlignment="Right" Width="110" Style="{StaticResource localButtonStyle}"/>
+            <Button Grid.Column="0" Grid.Row="1" Content="Remove Driver" HorizontalAlignment="Right" Width="110" Style="{StaticResource localButtonStyle}" Command="{Binding RemoveDriverCommand}"/>
         </Grid>
 
 
@@ -181,11 +182,11 @@
                 <Label Grid.Column="0" Grid.Row="1" Content="Directory" Style="{StaticResource propertyLabelStyle}"/>
                 <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
                     <TextBox Text="{Binding SaveDirectory}" HorizontalAlignment="Left" Width="300" Style="{StaticResource propertyTextBoxStyle}"/>
-                    <Button Content="Browse" FontSize="14" Width="75" Margin="5,2"/>
+                    <Button Content="Browse" FontSize="14" Width="75" Margin="5,2" Command="{Binding BrowseDirectoryCommand}"/>
                 </StackPanel>
 
                 <!-- Generate Script -->
-                <Button Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Content="Generate Script" FontSize="14" Padding="5,0" Width="110"/>
+                <Button Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Content="Generate Script" FontSize="14" Padding="5,0" Width="110" Command="{Binding GenerateScriptCommand}"/>
             </Grid>
         </GroupBox>
     </Grid>
