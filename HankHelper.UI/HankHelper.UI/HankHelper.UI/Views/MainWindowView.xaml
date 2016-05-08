@@ -1,0 +1,198 @@
+﻿<Window x:Class="HankHelper.UI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:HankHelper.UI"
+        mc:Ignorable="d"
+        Title="Hank Helper" Height="550" Width="800">
+
+    <Window.DataContext>
+        <local:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <Style x:Key="propertyLabelStyle" TargetType="Label">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,0,5,0"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="propertyTextBoxStyle" TargetType="TextBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="0,2,0,2"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="propertyGridStyle" TargetType="Grid">
+            <Setter Property="Width" Value="300"/>
+        </Style>
+
+        <Style x:Key="propertyGroupBoxStyle" TargetType="GroupBox">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Margin" Value="5"/>
+        </Style>
+
+        <Style x:Key="localButtonStyle" TargetType="Button">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Height" Value="30"/>
+            <Setter Property="Padding" Value="5,2"/>
+            <Setter Property="VerticalContentAlignment" Value="Center"/>
+            <Setter Property="Width" Value="100"/>
+        </Style>
+    </Window.Resources>
+
+    <!-- Main Window Grid -->
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Configure the basic script details -->
+        <GroupBox Grid.Column="0" Grid.Row="0" Header="Script Details" Style="{StaticResource propertyGroupBoxStyle}">
+            <Grid Style="{StaticResource propertyGridStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Script Title -->
+                <Label Grid.Column="0" Grid.Row="0" Content="Model" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding ScriptModel}" Style="{StaticResource propertyTextBoxStyle}"/>
+
+                <!-- Script Version -->
+                <Label Grid.Column="0" Grid.Row="1" Content="Version" Style="{StaticResource propertyLabelStyle}"/>
+                <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                    <TextBox Width="25" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Text="{Binding ScriptMajorVersion}" Style="{StaticResource propertyTextBoxStyle}"/>
+                    <Label Content="." Padding="5,0" FontSize="14" VerticalAlignment="Bottom"/>
+                    <TextBox Width="25" HorizontalAlignment="Left" HorizontalContentAlignment="Center" Text="{Binding ScriptMinorVersion}" Style="{StaticResource propertyTextBoxStyle}"/>
+                </StackPanel>
+
+                <!-- Color Selections -->
+                <Grid Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width=".5*"/>
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Text Color -->
+                    <Label Grid.Column="0" Grid.Row="0" Content="Foreground" Style="{StaticResource propertyLabelStyle}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="0" ItemsSource="{Binding Colors}" SelectedItem="{Binding ScriptTextColor}" Margin="0,2"/>
+
+                    <!-- Background Color -->
+                    <Label Grid.Column="0" Grid.Row="1" Content="Background" Style="{StaticResource propertyLabelStyle}"/>
+                    <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Colors}" SelectedItem="{Binding ScriptBgColor}" Margin="0,2"/>
+                </Grid>
+                
+                <!-- Working Directory -->
+                <Label Grid.Column="0" Grid.Row="3" Content="Path" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding ScriptWorkingDirectory}" Style="{StaticResource propertyTextBoxStyle}"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- Add new driver install code blocks to script -->
+        <GroupBox Grid.Column="0" Grid.Row="1" Header="Add Driver" Style="{StaticResource propertyGroupBoxStyle}">
+            <Grid Style="{StaticResource propertyGridStyle}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="11*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- Driver Name -->
+                <Label Grid.Column="0" Grid.Row="0" Content="Name" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding DriverName, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
+
+                <!-- Driver Directory -->
+                <Label Grid.Column="0" Grid.Row="1" Content="Directory" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.Row="1" Text="{Binding DriverDirectory, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
+
+                <!-- Executable File Name -->
+                <Label Grid.Column="0" Grid.Row="2" Content="Exec Target" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.Row="2" Text="{Binding DriverTargetExec, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
+
+                <!-- Executable Install Switches -->
+                <Label Grid.Column="0" Grid.Row="3" Content="Switches" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding DriverExecSwitches, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource propertyTextBoxStyle}" Grid.ColumnSpan="2"/>
+
+                <!-- Add Driver Button -->
+                <Button Grid.Column="2" Grid.Row="5" Content="Add Driver" HorizontalAlignment="Right" Style="{StaticResource localButtonStyle}" Command="{Binding AddDriverCommand}"/>
+            </Grid>
+        </GroupBox>
+
+        <!-- View the script blocks -->
+
+        <Grid Grid.Column="1" Grid.Row="0" Grid.RowSpan="2" Margin="5,11,10,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- List of Drivers Currently Added -->
+            <DataGrid Grid.Column="0" Grid.Row="0" Margin="0,5" FontSize="14" ItemsSource="{Binding DriversToAdd}" SelectedItem="{Binding SelectedDriver}"
+                CanUserAddRows="False" CanUserDeleteRows="False" CanUserResizeRows="False" CanUserReorderColumns="False" SelectionMode="Single"/>
+
+            <!-- Removed Selected Driver -->
+            <Button Grid.Column="0" Grid.Row="1" Content="Remove Driver" HorizontalAlignment="Right" Width="110" Style="{StaticResource localButtonStyle}" Command="{Binding RemoveDriverCommand}"/>
+        </Grid>
+
+
+
+        <!-- Save the script to disk -->
+        <GroupBox Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="2" Header="Generate Script" Style="{StaticResource propertyGroupBoxStyle}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <!-- File Name -->
+                <Label Grid.Column="0" Grid.Row="0" Content="Name" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.Row="0" Text="{Binding SaveName}" HorizontalAlignment="Left" Width="200" Style="{StaticResource propertyTextBoxStyle}"/>
+
+                <!-- Save Directory -->
+                <Label Grid.Column="0" Grid.Row="1" Content="Directory" Style="{StaticResource propertyLabelStyle}"/>
+                <StackPanel Grid.Column="1" Grid.Row="1" Orientation="Horizontal">
+                    <TextBox Text="{Binding SaveDirectory}" HorizontalAlignment="Left" Width="300" Style="{StaticResource propertyTextBoxStyle}"/>
+                    <Button Content="Browse" FontSize="14" Width="75" Margin="5,2" Command="{Binding BrowseDirectoryCommand}"/>
+                </StackPanel>
+
+                <!-- Generate Script -->
+                <Button Grid.Column="3" Grid.Row="0" Grid.RowSpan="2" Content="Generate Script" FontSize="14" Padding="5,0" Width="110" Command="{Binding GenerateScriptCommand}"/>
+            </Grid>
+        </GroupBox>
+    </Grid>
+</Window>
