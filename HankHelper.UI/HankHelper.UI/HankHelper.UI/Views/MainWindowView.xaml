@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:HankHelper.UI"
         mc:Ignorable="d"
-        Title="Hank Helper" Height="500" Width="700">
+        Title="Hank Helper" Height="550" Width="800">
 
     <Window.DataContext>
         <local:MainWindowViewModel/>
@@ -65,11 +65,12 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Script Title -->
-                <Label Grid.Column="0" Grid.Row="0" Content="Title" Style="{StaticResource propertyLabelStyle}"/>
-                <TextBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding ScriptTitle}" Style="{StaticResource propertyTextBoxStyle}"/>
+                <Label Grid.Column="0" Grid.Row="0" Content="Model" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.ColumnSpan="2" Grid.Row="0" Text="{Binding ScriptModel}" Style="{StaticResource propertyTextBoxStyle}"/>
 
                 <!-- Script Version -->
                 <Label Grid.Column="0" Grid.Row="1" Content="Version" Style="{StaticResource propertyLabelStyle}"/>
@@ -99,6 +100,10 @@
                     <Label Grid.Column="0" Grid.Row="1" Content="Background" Style="{StaticResource propertyLabelStyle}"/>
                     <ComboBox Grid.Column="1" Grid.Row="1" ItemsSource="{Binding Colors}" SelectedItem="{Binding ScriptBgColor}" Margin="0,2"/>
                 </Grid>
+                
+                <!-- Working Directory -->
+                <Label Grid.Column="0" Grid.Row="3" Content="Path" Style="{StaticResource propertyLabelStyle}"/>
+                <TextBox Grid.Column="1" Grid.Row="3" Text="{Binding ScriptWorkingDirectory}" Style="{StaticResource propertyTextBoxStyle}"/>
             </Grid>
         </GroupBox>
 

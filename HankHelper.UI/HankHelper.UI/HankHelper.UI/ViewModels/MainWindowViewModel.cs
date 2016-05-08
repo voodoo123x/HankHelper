@@ -13,7 +13,7 @@ namespace HankHelper.UI
     public class MainWindowViewModel : BasePropertyChanged, INotifyPropertyChanged
     {
         #region Private Data Members
-        private string m_ScriptTitle;
+        private string m_ScriptModel;
         private string m_ScriptTextColor;
         private string m_ScriptBgColor;
         private string m_ScriptWorkingDirectory;
@@ -31,16 +31,16 @@ namespace HankHelper.UI
         #endregion
 
         #region Public Data Members
-        public string ScriptTitle
+        public string ScriptModel
         {
-            get { return m_ScriptTitle; }
+            get { return m_ScriptModel; }
 
             set
             {
-                if (value != m_ScriptTitle)
+                if (value != m_ScriptModel)
                 {
-                    m_ScriptTitle = value;
-                    NotifyPropertyChanged("ScriptTitle");
+                    m_ScriptModel = value;
+                    NotifyPropertyChanged("ScriptModel");
                 }
             }
         }
@@ -354,14 +354,28 @@ namespace HankHelper.UI
 
         public bool CanGenerateScript(object param)
         {
-            return (!string.IsNullOrEmpty(ScriptTitle)
+            return (!string.IsNullOrEmpty(ScriptModel)
                 && !string.IsNullOrEmpty(SaveName)
                 && !string.IsNullOrEmpty(SaveDirectory));
         }
 
         public void OnGenerateScript(object param)
         {
-            
+            IList<DriverEntity> drivers = DriversToAdd.ToList();
+            ScriptColor bgColor = (ScriptColor)Enum.Parse(typeof(ScriptColor), ScriptBgColor);
+            ScriptColor fgColor = (ScriptColor)Enum.Parse(typeof(ScriptColor), ScriptTextColor);
+            string colors = string.Format("{0}{1}", ((char)bgColor).ToString(), ((char)fgColor).ToString());
+           
+            bool success = ScriptGenerator.ScriptGenerator.Instance.GenerateScript(drivers, ScriptModel, SaveName, SaveDirectory, ScriptWorkingDirectory, ScriptMajorVersion, ScriptMinorVersion, colors);
+
+            if (success)
+            {
+                MessageBox.Show("Script generated successfully!", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information, MessageBoxDefaultButton.Button1);
+            }
+            else
+            {
+                MessageBox.Show("Error occurred generating script.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1);
+            }
         }
         #endregion
         #endregion
@@ -376,7 +390,7 @@ namespace HankHelper.UI
                 colors.Add(c.ToString());
             }
 
-            return colors;
+            return colors.OrderBy(c => c.ToString()).ToList();
         }
         #endregion
 
@@ -399,9 +413,5 @@ namespace HankHelper.UI
             LightYellow = 'E',
             BrightWhite = 'F'
         }
-
-        //Code for getting character associated with each value
-        //ScriptColor sc = (ScriptColor)Enum.Parse(typeof(ScriptColor), value);
-        //System.Windows.MessageBox.Show(((char)sc).ToString());
     }
 }

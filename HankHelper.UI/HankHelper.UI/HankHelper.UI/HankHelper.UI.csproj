@@ -106,6 +106,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Entities\DriverEntity.cs" />
+    <Compile Include="ScriptGenerator\ScriptGenerator.cs" />
     <Compile Include="ViewModels\BasePropertyChanged.cs" />
     <Compile Include="ViewModel\MainViewModel.cs" />
     <Compile Include="ViewModel\ViewModelLocator.cs" />
